@@ -1,9 +1,11 @@
 package org.demo.elasticsearchkibanalogstash.service;
 
+import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
 import org.demo.elasticsearchkibanalogstash.elastic.ProductDocument;
 import org.demo.elasticsearchkibanalogstash.entity.Product;
 import org.demo.elasticsearchkibanalogstash.repository.ProductElasticsearchRepository;
 import org.demo.elasticsearchkibanalogstash.repository.ProductRepository;
+import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,7 +34,7 @@ public class ProductService {
         return savedProduct;
     }
 
-//    public List<ProductDocument> searchProducts(String query) {
-//        return elasticsearchRepository.findByNameContainingIgnoreCase(query);
-//    }
+    public List<ProductDocument> searchProducts(String query) {
+        return elasticsearchRepository.findAllByName(query);
+    }
 }

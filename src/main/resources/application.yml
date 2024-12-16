@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: elastic-search-kibana-logstash
+
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/elastic
+    username: postgres
+    password: 12345
+  jpa:
+    hibernate:
+      ddl-auto: create
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  elasticsearch:
+    uris: http://localhost:9200
+    username: seymur
+    password: seymur814

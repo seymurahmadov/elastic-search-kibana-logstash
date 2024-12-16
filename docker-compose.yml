@@ -1,0 +1,62 @@
+version: '3'
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.6.0
+    container_name: elastic_search
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ELASTIC_USERNAME=seymur
+      - ELASTIC_PASSWORD=seymur814
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"  # Elasticsearch REST API portu
+      - "9300:9300"  # Elasticsearch node-to-node iletişim portu
+    networks:
+      - elk
+
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.6.0
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=seymur
+      - ELASTICSEARCH_PASSWORD=seymur814
+    ports:
+      - "5601:5601"  # Kibana portu
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk
+
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.6.0
+    container_name: logstash
+    environment:
+      - LS_JAVA_OPTS=-Xmx256m -Xms256m  # Java heap memory ayarları
+    volumes:
+      - ./logstash/config:/usr/share/logstash/config
+      - ./logstash/pipeline:/usr/share/logstash/pipeline
+    ports:
+      - "5044:5044"  # Logstash input port (örneğin Filebeat ile bağlantı)
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+
+volumes:
+  elasticsearch-data:
+    driver: local
+
+networks:
+  elk:
+    driver: bridge
+
