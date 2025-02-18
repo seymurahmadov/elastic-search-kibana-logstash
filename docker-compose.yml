@@ -17,7 +17,7 @@ services:
       - elasticsearch-data:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"  # Elasticsearch REST API portu
-      - "9300:9300"  # Elasticsearch node-to-node iletişim portu
+      - "9300:9300"  # Elasticsearch node-to-node connection portu
     networks:
       - elk
 
@@ -41,12 +41,12 @@ services:
     image: docker.elastic.co/logstash/logstash:8.6.0
     container_name: logstash
     environment:
-      - LS_JAVA_OPTS=-Xmx256m -Xms256m  # Java heap memory ayarları
+      - LS_JAVA_OPTS=-Xmx256m -Xms256m  # Java heap memory settings
     volumes:
       - ./logstash/config:/usr/share/logstash/config
       - ./logstash/pipeline:/usr/share/logstash/pipeline
     ports:
-      - "5044:5044"  # Logstash input port (örneğin Filebeat ile bağlantı)
+      - "5044:5044"  # Logstash input port 
     networks:
       - elk
     depends_on:
